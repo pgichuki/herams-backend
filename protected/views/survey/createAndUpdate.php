@@ -34,38 +34,40 @@ Section::begin()
 
 $ajaxSaveUrl = Json::encode(Url::to(['survey/ajax-save']));
 $surveyId = Json::encode($model instanceof UpdateForm ? $model->getSurveyId() : null);
-echo Creator::widget([
-    'options' => [],
-    'surveyCreatorCustomizers' => [
-        new JsExpression('(creator) => { creator.toolbox.allowExpandMultipleCategories = true}'),
-        new JsExpression(<<<JS
-function(surveyCreator) {
-  let surveyId = {$surveyId};
-  surveyCreator.saveSurveyFunc = function (saveNo, callback) {
-    const ajaxSaveUrl = {$ajaxSaveUrl} + (surveyId != null ? '?id=' + surveyId : '');
-    
-    const response = fetch(
-      ajaxSaveUrl,
-      {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        headers: {
-          'Accept': 'application/json;indent=2',
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': yii.getCsrfToken(),
-        },
-        body: JSON.stringify({config: surveyCreator.JSON}),
-      }
-    )
-    .then(response => response.json())
-    .then(data => {callback(saveNo, true);surveyId = data.id})
-  } 
-}
-JS
-        ),
-    ],
-    'survey' => $model->config,
-]);
+
+echo \prime\widgets\SurveyCreator::widget();
+//echo Creator::widget([
+//    'options' => [],
+//    'surveyCreatorCustomizers' => [
+//        new JsExpression('(creator) => { creator.toolbox.allowExpandMultipleCategories = true}'),
+//        new JsExpression(<<<JS
+//function(surveyCreator) {
+//  let surveyId = {$surveyId};
+//  surveyCreator.saveSurveyFunc = function (saveNo, callback) {
+//    const ajaxSaveUrl = {$ajaxSaveUrl} + (surveyId != null ? '?id=' + surveyId : '');
+//
+//    const response = fetch(
+//      ajaxSaveUrl,
+//      {
+//        method: 'POST',
+//        mode: 'cors',
+//        cache: 'no-cache',
+//        headers: {
+//          'Accept': 'application/json;indent=2',
+//          'Content-Type': 'application/json',
+//          'X-CSRF-Token': yii.getCsrfToken(),
+//        },
+//        body: JSON.stringify({config: surveyCreator.JSON}),
+//      }
+//    )
+//    .then(response => response.json())
+//    .then(data => {callback(saveNo, true);surveyId = data.id})
+//  }
+//}
+//JS
+//        ),
+//    ],
+//    'survey' => $model->config,
+//]);
 
 Section::end();

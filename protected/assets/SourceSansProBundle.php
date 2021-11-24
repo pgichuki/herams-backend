@@ -12,4 +12,7 @@ class SourceSansProBundle extends AssetBundle
     public $css = [
         'css?family=Source+Sans+Pro:200,300,400,600,700'
     ];
+    public $cssOptions = [
+        'crossorigin' => 'anonymous'
+    ];
 }
